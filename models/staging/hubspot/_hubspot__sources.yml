@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: hubspot
+    description: Hubspot Tables
+    database: bbg-platform
+    schema: hubspot
+    tables:
+      - name: contact
+        description: Hubspot contacts

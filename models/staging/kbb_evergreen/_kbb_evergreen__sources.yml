@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: kbb_evergreen
+    description: KBB Evergreen tables synced from MySQL to Bigquery
+    database: bbg-platform
+    schema: google_cloud_mysql_kbb_evergreen
+    tables:
+      - name: tracking_optins
+        description: Click Funnel Optins
+      - name: tracking_orders
+        description: Click Funnel Orders

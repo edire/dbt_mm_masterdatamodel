@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: stripe_mastermind
+    description: Mastermind.com Stripe Account
+    database: bbg-platform
+    schema: stripe_mastermind
+    tables:
+      - name: customer
+        description: Stripe Customers

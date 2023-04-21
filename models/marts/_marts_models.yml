@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: dim_contacts
+    description: one unique email per row with the original funnel_id and source_desc, and most recent contact info.
+    columns:
+      - name: email
+        description: primary key for dim_contacts
+        tests:
+          - unique

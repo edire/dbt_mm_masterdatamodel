@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: stripe_mindmint
+    description: General Stripe Account
+    database: bbg-platform
+    schema: stripe_mindmint
+    tables:
+      - name: customer
+        description: Stripe Customers

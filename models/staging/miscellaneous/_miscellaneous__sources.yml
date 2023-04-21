@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: analytics_stage
+    description: A combination of the archived tables from MySQL
+    database: bbg-platform
+    schema: analytics_stage
+    tables:
+      - name: fct_historical_optins
+        description: A table with optins combined from all known archived sources.
+      - name: fct_historical_orders
+        description: A table with orders combined from all known archived sources.
+      - name: stg_cms__customers
+        description: A table of customers from the archived CMS system.

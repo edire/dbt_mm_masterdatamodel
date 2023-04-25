@@ -8,3 +8,11 @@ sources:
     tables:
       - name: customer
         description: Stripe Customers
+      - name: balance_transaction
+        description: List of all Stripe Transactions
+      - name: charge
+        description: List of all Charges
+      - name: refund
+        description: List of all Refunds
+      - name: dispute
+        description: List of all Disputes

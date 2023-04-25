@@ -1,8 +1,8 @@
 with all_names as (
     select k.email
         , k.orig_email
-        , k.first_name
-        , k.last_name
+        , replace(k.first_name, '"', '') as first_name
+        , replace(k.last_name, '"', '') as last_name
         , k.dt
         , row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc) as rownum
     from {{ ref('int_contacts_combined') }} k

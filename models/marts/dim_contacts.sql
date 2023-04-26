@@ -5,6 +5,7 @@ with base as (
         , k.dt as dt_captured
         , k.funnel_id as funnel_id_captured
         , k.source_desc as source_captured
+        , k.source_id as source_id_captured
         , row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc) as rownum
     from {{ ref('int_contacts_combined') }} k
     where ifnull(k.email, k.orig_email) is not null
@@ -15,6 +16,7 @@ with base as (
         , k.dt_captured
         , k.funnel_id_captured
         , k.source_captured
+        , k.source_id_captured
     from base k
     where k.rownum = 1
 )
@@ -54,6 +56,7 @@ select b.email
     , b.dt_captured
     , b.funnel_id_captured
     , b.source_captured
+    , b.source_id_captured
     , p.phone
     , p.orig_phone
     , a.address_1

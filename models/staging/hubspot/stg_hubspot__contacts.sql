@@ -1,6 +1,7 @@
 
 
-SELECT analytics.fnEmail(c.property_email) as email
+SELECT c.id as id_contact
+  , analytics.fnEmail(c.property_email) as email
   , nullif(trim(c.property_email), '') as orig_email
   , nullif(trim(c.property_firstname), '') as first_name
   , nullif(trim(c.property_lastname), '') as last_name
@@ -12,6 +13,4 @@ SELECT analytics.fnEmail(c.property_email) as email
   , nullif(trim(c.property_zip), '') as zip
   , nullif(trim(c.property_country), '') as country
   , property_createdate as dt
-  , c.id as source_id
-  , 'hubspot.contact' as source_desc
 FROM {{ source('hubspot', 'contact') }} c

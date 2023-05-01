@@ -8,3 +8,19 @@ models:
         description: primary key for dim_contacts
         tests:
           - unique
+  - name: fct_orders
+    description: final table of orders
+    columns:
+      - name: id_order
+        description: primary key
+        tests:
+          - unique
+          - not_null
+  - name: fct_transactions
+    description: final table of company transactions
+    columns:
+      - name: id_transactions
+        description: primary key
+        tests:
+          - unique
+          - not_null

@@ -1,6 +1,7 @@
 
 
-SELECT analytics.fnEmail(t.email) AS email
+SELECT t.id as id_tracking_optins
+	, analytics.fnEmail(t.email) AS email
 		, NULLIF(TRIM(t.email), '') as orig_email
 		, NULLIF(trim(t.first),'') as first_name
 		, NULLIF(trim(t.last),'') as last_name
@@ -22,6 +23,4 @@ SELECT analytics.fnEmail(t.email) AS email
 		, NULLIF(REPLACE(JSON_EXTRACT(json, '$.contact.additional_info.utm_content'), '"', ''), '') AS utm_content
 		, NULLIF(REPLACE(JSON_EXTRACT(json, '$.contact.additional_info.utm_campaign'), '"', ''), '') AS utm_campaign
 		, NULLIF(REPLACE(JSON_EXTRACT(json, '$.contact.additional_info.utm_term'), '"', ''), '') AS utm_term
-		, t.id as source_id
-		, 'google_cloud_mysql_kbb_evergreen.tracking_optins' as source_desc
 FROM {{ source('kbb_evergreen', 'tracking_optins') }} t

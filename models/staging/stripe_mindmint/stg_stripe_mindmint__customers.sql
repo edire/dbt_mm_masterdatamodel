@@ -1,6 +1,7 @@
 
 
-select analytics.fnEmail(c.email) as email
+select c.id as id_customer
+  , analytics.fnEmail(c.email) as email
   , nullif(trim(c.email), '') as orig_email
   , nullif(trim(json_extract(c.metadata, '$.first_name')), '') as first_name
   , nullif(trim(json_extract(c.metadata, '$.last_name')), '') as last_name
@@ -13,6 +14,4 @@ select analytics.fnEmail(c.email) as email
   , nullif(trim(coalesce(c.address_postal_code, c.shipping_address_postal_code)), '') as zip
   , nullif(trim(coalesce(c.address_country, c.shipping_address_country)), '') as country
   , c.created as dt
-  , c.id as source_id
-  , 'stripe_mindmint.customer' as source_desc
 from {{ source('stripe_mindmint', 'customer') }} c

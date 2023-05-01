@@ -1,0 +1,43 @@
+version: 2
+
+models:
+  - name: int_transactions_mastermind
+    description: List of all customer related transactions in mastermind.com app stripe account
+    columns:
+      - name: id_balance_transaction
+        description: primary key
+        tests:
+          - unique
+          - not_null
+  - name: int_transactions_mindmint
+    description: List of all customer related transactions in general stripe account
+    columns:
+      - name: id_balance_transaction
+        description: primary key
+        tests:
+          - unique
+          - not_null
+  - name: int_transactions_agg
+    description: List of all customer transactions
+    columns:
+      - name: id_transactions
+        description: primary key
+        tests:
+          - unique
+          - not_null
+  - name: int_orders_base
+    description: List of orders with identifiers from click funnels or hubspot
+    columns:
+      - name: id_order
+        description: primary key
+        tests:
+          - unique
+          - not_null
+  - name: int_orders_missing
+    description: List of orders manually created
+    columns:
+      - name: id_order
+        description: primary key
+        tests:
+          - unique
+          - not_null

@@ -1,11 +1,4 @@
 
-{# {{
-  config(
-    materialized = 'incremental',
-    unique_key = ['email', 'source_desc', 'dt', 'source_id']
-    )
-}} #}
-
 with combined as (
 
     select k.email
@@ -82,8 +75,8 @@ with combined as (
         , k.country
         , k.funnel_id
         , cast(k.dt as datetime) as dt
-        , k.source_desc
-        , cast(k.source_id as string) as source_id
+        , 'kbb_evergreen.tracking_optins' as source_desc
+        , cast(k.id_tracking_optins as string) as source_id
     from {{ ref('stg_kbb_evergreen__optins') }} k
 
     union all
@@ -102,8 +95,8 @@ with combined as (
         , k.country
         , k.funnel_id
         , cast(k.dt as datetime) as dt
-        , k.source_desc
-        , cast(k.source_id as string) as source_id
+        , 'kbb_evergreen.tracking_orders' as source_desc
+        , cast(k.id_tracking_orders as string) as source_id
     from {{ ref('stg_kbb_evergreen__orders') }} k
 
     union all
@@ -122,8 +115,8 @@ with combined as (
         , k.country
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
-        , k.source_desc
-        , cast(k.source_id as string) as source_id
+        , 'hubspot.contact' as source_desc
+        , cast(k.id_contact as string) as source_id
     from {{ ref('stg_hubspot__contacts') }} k
 
     union all
@@ -142,8 +135,8 @@ with combined as (
         , k.country
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
-        , k.source_desc
-        , cast(k.source_id as string) as source_id
+        , 'stripe_mastermind.customer' as source_desc
+        , cast(k.id_customer as string) as source_id
     from {{ ref('stg_stripe_mastermind__customers') }} k
 
     union all
@@ -162,14 +155,11 @@ with combined as (
         , k.country
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
-        , k.source_desc
-        , cast(k.source_id as string) as source_id
+        , 'stripe_mindmint.customer' as source_desc
+        , cast(k.id_customer as string) as source_id
     from {{ ref('stg_stripe_mindmint__customers') }} k
     
 )
 
 select c.*
 from combined c
-{# {% if is_incremental() %}
-  where c.dt >= date_add(current_date, interval -3 day)
-{% endif %} #}

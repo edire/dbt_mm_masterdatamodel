@@ -65,6 +65,7 @@ select b.id_balance_transaction
     , trim(coalesce(s.product, p.product, d1.product, d2.product, b.product)) as product
     , coalesce(s.order_amount, p.order_amount) as order_amount
     , coalesce(s.tracking_orders_id, p.tracking_orders_id) as tracking_orders_id
+    , b.cancelled_date
 from base b
     left join subs s
         on b.id_balance_transaction = s.id_balance_transaction

@@ -1,9 +1,16 @@
 
-select generate_uuid() as id_order
+{{
+  config(
+    materialized = 'view',
+    )
+}}
+
+select FARM_FINGERPRINT(concat(t.email, t.product, t.transaction_date)) as id_order
     , t.id_transactions
     , t.email
     , t.product
-    , t.transaction_date
+    , t.transaction_date as order_date
+    , t.cancelled_date
 from {{ ref('int_transactions_agg') }} t
     left join {{ ref('int_orders_base') }} o
         on t.email = o.email

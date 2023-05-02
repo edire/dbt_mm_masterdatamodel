@@ -24,3 +24,5 @@ sources:
         description: List of all Stripe Plans
       - name: product
         description: List of all Stripe Products
+      - name: subscription_history
+        description: List of stripe subscription information to get cancel status

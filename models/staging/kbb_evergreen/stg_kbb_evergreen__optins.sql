@@ -23,4 +23,5 @@ SELECT t.id as id_tracking_optins
 		, NULLIF(REPLACE(JSON_EXTRACT(json, '$.contact.additional_info.utm_content'), '"', ''), '') AS utm_content
 		, NULLIF(REPLACE(JSON_EXTRACT(json, '$.contact.additional_info.utm_campaign'), '"', ''), '') AS utm_campaign
 		, NULLIF(REPLACE(JSON_EXTRACT(json, '$.contact.additional_info.utm_term'), '"', ''), '') AS utm_term
+		, t._fivetran_synced
 FROM {{ source('kbb_evergreen', 'tracking_optins') }} t

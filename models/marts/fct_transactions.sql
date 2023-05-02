@@ -9,7 +9,7 @@ with trans as (
     select t.id_transactions
         , o.id_order
     from trans t
-        join {{ ref('fct_orders') }} o
+        join {{ ref('int_orders_agg') }} o
             on t.email = o.email
             and t.product = o.product
             and t.transaction_date >= o.order_date

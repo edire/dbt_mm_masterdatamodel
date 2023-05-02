@@ -83,6 +83,7 @@ select b.id_balance_transaction
     , coalesce(s.tracking_orders_id, p.tracking_orders_id) as tracking_orders_id
     , b.hubspot_deal_id
     , h.rep_id as hubspot_rep_id
+    , b.cancelled_date
 from base b
     left join subs s
         on b.id_balance_transaction = s.id_balance_transaction

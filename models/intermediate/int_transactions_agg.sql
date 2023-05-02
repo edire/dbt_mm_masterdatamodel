@@ -1,6 +1,5 @@
 
-
-select generate_uuid() as id_transactions
+select FARM_FINGERPRINT(concat(t.id_balance_transaction, 'stripe_mindmint_balance_transaction')) as id_transactions
     , t.id_balance_transaction as source_id
     , 'stripe_mindmint_balance_transaction' as source
     , t.gross_amount
@@ -25,11 +24,12 @@ select generate_uuid() as id_transactions
     , t.hubspot_deal_id
     , coalesce(t.tracking_orders_id, t.hubspot_deal_id) as id_order
     , t.hubspot_rep_id
+    , t.cancelled_date
 from {{ ref('int_transactions_mindmint') }} t
 
 union all
 
-select generate_uuid() as id_transactions
+select FARM_FINGERPRINT(concat(t.id_balance_transaction, 'stripe_mastermind_balance_transaction')) as id_transactions
     , t.id_balance_transaction as source_id
     , 'stripe_mastermind_balance_transaction' as source
     , t.gross_amount
@@ -54,4 +54,5 @@ select generate_uuid() as id_transactions
     , null as hubspot_deal_id
     , t.tracking_orders_id as order_id
     , null as hubspot_rep_id
+    , t.cancelled_date
 from {{ ref('int_transactions_mastermind') }} t

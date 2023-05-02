@@ -4,7 +4,7 @@ sources:
   - name: hubspot
     description: Hubspot Tables
     database: bbg-platform
-    schema: hubspot
+    schema: hubspot2
     tables:
       - name: contact
         description: Hubspot contacts
@@ -12,3 +12,5 @@ sources:
         description: Hubspot products
       - name: deal
         description: Hubspot deals
+      - name: deal_property_history
+        description: Hubspot deal property history

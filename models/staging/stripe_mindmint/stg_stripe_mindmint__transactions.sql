@@ -67,6 +67,7 @@ select t.id_balance_transaction
     , IFNULL(c.description, c2.description) AS charge_description
     , pl.product_id
     , pd.name as product
+    , sh.canceled_at as cancelled_date
 from transactions t
     left join charge c
         on t.source = c.id
@@ -87,3 +88,6 @@ from transactions t
         on si.plan_id = pl.id
     left join {{ source('stripe_mindmint', 'product') }} pd
         on pl.product_id = pd.id
+    left join {{ source('stripe_mindmint', 'subscription_history') }} sh
+        on i.subscription_id = sh.id
+        and sh._fivetran_active = true

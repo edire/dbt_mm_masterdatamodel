@@ -2,8 +2,6 @@
 with charge as (
     select c.id
         , c.payment_intent_id
-        {# , c.deal_id #}
-        {# , c.product_id #}
         , c.description
         , c.customer_id
         , c.invoice_id
@@ -60,11 +58,10 @@ select t.id_balance_transaction
     , cs.email as orig_email
     , i.subscription_id
     , i.payment_intent_id
-    {# , IFNULL(NULLIF(TRIM(c.deal_id), ''), NULLIF(TRIM(c2.deal_id), '')) AS hubspot_deal_id
-    , IFNULL(NULLIF(TRIM(c.product_id), ''), NULLIF(TRIM(c2.product_id), '')) AS hubspot_product_id #}
     , IFNULL(c.description, c2.description) AS charge_description
     , pl.product_id
     , pd.name as product
+    , sh.canceled_at as cancelled_date
 from transactions t
     left join charge c
         on t.source = c.id
@@ -85,3 +82,6 @@ from transactions t
         on si.plan_id = pl.id
     left join {{ source('stripe_mastermind', 'product') }} pd
         on pl.product_id = pd.id
+    left join {{ source('stripe_mindmint', 'subscription_history') }} sh
+        on i.subscription_id = sh.id
+        and sh._fivetran_active = true

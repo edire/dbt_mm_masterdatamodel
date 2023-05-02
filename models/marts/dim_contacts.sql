@@ -1,25 +1,16 @@
 
-with base as (
+with first_instance as (
     select k.email
         , k.orig_email
         , k.dt as dt_captured
         , k.funnel_id as funnel_id_captured
         , k.source_desc as source_captured
         , k.source_id as source_id_captured
-        , row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc) as rownum
     from {{ ref('int_contacts_combined') }} k
     where ifnull(k.email, k.orig_email) is not null
+    qualify row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc) = 1
 )
-, first_instance as (
-    select k.email
-        , k.orig_email
-        , k.dt_captured
-        , k.funnel_id_captured
-        , k.source_captured
-        , k.source_id_captured
-    from base k
-    where k.rownum = 1
-)
+
 , last_address as (
     select a.email
         , a.orig_email
@@ -32,6 +23,7 @@ with base as (
     from {{ ref('dim_contacts_addresses') }} a
     where a.recency = 1
 )
+
 , last_phone as (
     select a.email
         , a.orig_email
@@ -40,6 +32,7 @@ with base as (
     from {{ ref('dim_contacts_phones') }} a
     where a.recency = 1
 )
+
 , last_name as (
     select a.email
         , a.orig_email

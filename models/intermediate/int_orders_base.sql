@@ -1,10 +1,4 @@
 
-with base as (
-    select *
-        , row_number() over (partition by b.id_order order by b.transaction_date asc) as rownum
-    from {{ ref('int_transactions_agg') }} b
-    where b.id_order is not null
-)
 
 select b.id_order
     , b.id_transactions
@@ -15,5 +9,6 @@ select b.id_order
     , b.tracking_orders_id
     , b.hubspot_deal_id
     , b.hubspot_rep_id
-from base b
-where b.rownum = 1
+from {{ ref('int_transactions_agg') }} b
+where b.id_order is not null
+qualify row_number() over (partition by b.id_order order by b.transaction_date asc) = 1

@@ -8,7 +8,6 @@ with trans as (
 , un_classified as (
     select t.id_transactions
         , o.id_order
-        , row_number() over (partition by t.id_transactions order by o.order_date desc) as rownum
     from trans t
         join {{ ref('fct_orders') }} o
             on t.email = o.email
@@ -17,6 +16,7 @@ with trans as (
     where t.id_order is null
         and t.email is not null
         and t.product is not null
+    qualify row_number() over (partition by t.id_transactions order by o.order_date desc) = 1
 )
 
 select t.id_transactions
@@ -47,4 +47,3 @@ select t.id_transactions
 from trans t
     left join un_classified c
         on t.id_transactions = c.id_transactions
-        and c.rownum = 1

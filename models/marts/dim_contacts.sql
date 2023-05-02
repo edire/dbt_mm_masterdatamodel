@@ -8,7 +8,7 @@ with first_instance as (
         , k.source_id as source_id_captured
     from {{ ref('int_contacts_combined') }} k
     where ifnull(k.email, k.orig_email) is not null
-    qualify row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc) = 1
+    qualify row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc, k.source_id desc) = 1
 )
 
 , last_address as (

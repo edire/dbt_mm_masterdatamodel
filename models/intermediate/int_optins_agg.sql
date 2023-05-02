@@ -1,11 +1,11 @@
 
-{{
+{# {{
   config(
     materialized = 'incremental'
     )
-}}
+}} #}
 
-{# select dt
+select dt
     , email
     , funnel_id
     , funnel_step_id
@@ -19,10 +19,10 @@
     , utm_term
     , source_id
     , source_desc
-    , cast(null as timestamp) as _fivetran_synced
+    {# , cast(null as timestamp) as _fivetran_synced #}
 from {{ source('analytics_stage', 'fct_historical_optins') }}
 
-union all #}
+union all
 
 select p.dt
     , p.email
@@ -38,9 +38,9 @@ select p.dt
     , p.utm_term
     , p.id_tracking_optins as source_id
     , 'kbb_evergreen_tracking_optins' as source_desc
-    , p._fivetran_synced
+    {# , p._fivetran_synced #}
 from {{ ref('stg_kbb_evergreen__optins') }} p
-where true
+{# where true
 {% if is_incremental() %}
   and p._fivetran_synced > coalesce((select max(_fivetran_synced) from {{ this }}), '1900-01-01')
-{% endif %}
+{% endif %} #}

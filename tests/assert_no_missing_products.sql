@@ -1,11 +1,11 @@
 
 {{
   config(
-    error_if = '>5',
+    error_if = '>2',
     )
 }}
 
-select t.source_id
+select distinct t.product
 from {{ ref('fct_transactions') }} t
     left join analytics.dim_products p
         on t.product = p.product

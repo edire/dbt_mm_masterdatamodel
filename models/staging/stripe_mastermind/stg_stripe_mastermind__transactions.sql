@@ -82,6 +82,6 @@ from transactions t
         on si.plan_id = pl.id
     left join {{ source('stripe_mastermind', 'product') }} pd
         on pl.product_id = pd.id
-    left join {{ source('stripe_mindmint', 'subscription_history') }} sh
+    left join {{ source('stripe_mastermind', 'subscription_history') }} sh
         on i.subscription_id = sh.id
         and sh._fivetran_active = true

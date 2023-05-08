@@ -5,7 +5,7 @@
     )
 }}
 
-select FARM_FINGERPRINT(concat(t.email, t.product, t.transaction_date)) as id_order
+select {{ dbt_utils.generate_surrogate_key(['t.email', 't.product', 't.transaction_date']) }} as id_order
     , t.id_transactions
     , t.email
     , t.product

@@ -1,5 +1,5 @@
 
-select FARM_FINGERPRINT(concat(t.id_balance_transaction, 'stripe_mindmint_balance_transaction')) as id_transactions
+select {{ dbt_utils.generate_surrogate_key(['t.id_balance_transaction', '"stripe_mindmint_balance_transaction"']) }} as id_transactions
     , t.id_balance_transaction as source_id
     , 'stripe_mindmint_balance_transaction' as source
     , t.gross_amount
@@ -29,7 +29,7 @@ from {{ ref('int_transactions_mindmint') }} t
 
 union all
 
-select FARM_FINGERPRINT(concat(t.id_balance_transaction, 'stripe_mastermind_balance_transaction')) as id_transactions
+select {{ dbt_utils.generate_surrogate_key(['t.id_balance_transaction', '"stripe_mastermind_balance_transaction"']) }} as id_transactions
     , t.id_balance_transaction as source_id
     , 'stripe_mastermind_balance_transaction' as source
     , t.gross_amount

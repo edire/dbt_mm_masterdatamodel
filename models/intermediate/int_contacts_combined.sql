@@ -13,6 +13,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , k.ip
+        , k.optin_ip as activity_ip
         , k.funnel_id
         , cast(k.dt as datetime) as dt
         , k.source_desc
@@ -33,6 +35,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , k.ip
+        , k.order_ip as activity_ip
         , k.funnel_id
         , cast(k.dt as datetime) as dt
         , k.source_desc
@@ -53,6 +57,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , cast(null as string) as ip
+        , cast(null as string) as activity_ip
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
         , k.source_desc
@@ -73,6 +79,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , k.ip
+        , k.optin_ip as activity_ip
         , k.funnel_id
         , cast(k.dt as datetime) as dt
         , 'kbb_evergreen.tracking_optins' as source_desc
@@ -93,6 +101,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , k.ip
+        , k.order_ip as activity_ip
         , k.funnel_id
         , cast(k.dt as datetime) as dt
         , 'kbb_evergreen.tracking_orders' as source_desc
@@ -113,6 +123,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , cast(null as string) as ip
+        , cast(null as string) as activity_ip
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
         , 'hubspot.contact' as source_desc
@@ -133,6 +145,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , cast(null as string) as ip
+        , cast(null as string) as activity_ip
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
         , 'stripe_mastermind.customer' as source_desc
@@ -153,6 +167,8 @@ with combined as (
         , k.state
         , k.zip
         , k.country
+        , cast(null as string) as ip
+        , cast(null as string) as activity_ip
         , cast(null as string) as funnel_id
         , cast(k.dt as datetime) as dt
         , 'stripe_mindmint.customer' as source_desc

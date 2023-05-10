@@ -13,5 +13,5 @@ select dt
     , utm_term
     , source_id
     , source_desc
-from {{ ref('int_optins_agg') }}
+from {{ ref('int_optins__agg') }}
 qualify row_number() over (partition by email, funnel_id order by dt) = 1

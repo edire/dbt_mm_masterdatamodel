@@ -11,7 +11,7 @@ with all_address as (
         , k.dt
         , k.source_id
         , row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc, k.source_id desc) as rownum
-    from {{ ref('int_contacts_combined') }} k
+    from {{ ref('int_contacts__combined') }} k
     where ifnull(k.email, k.orig_email) is not null
         and (k.zip is not null or k.state is not null)
 )

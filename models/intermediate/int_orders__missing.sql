@@ -6,13 +6,13 @@
 }}
 
 select {{ dbt_utils.generate_surrogate_key(['t.email', 't.product', 't.transaction_date']) }} as id_order
-    , t.id_transactions
+    , t.pk as id_transactions
     , t.email
     , t.product
     , t.transaction_date as order_date
     , t.cancelled_date
-from {{ ref('int_transactions_agg') }} t
-    left join {{ ref('int_orders_base') }} o
+from {{ ref('int_stripe_transactions__agg') }} t
+    left join {{ ref('int_orders__base') }} o
         on t.email = o.email
         and t.product = o.product
         and t.transaction_date >= o.order_date

@@ -17,16 +17,16 @@ select b.id_order
     , b.hubspot_deal_id
     , b.hubspot_rep_id
     , b.id_transactions
-from {{ ref('int_orders_agg') }} b
-    left join {{ ref('int_orders_status_refunds') }} r
+from {{ ref('int_orders__agg') }} b
+    left join {{ ref('int_orders_status__refunds') }} r
         on b.id_order = r.id_order
-    left join {{ ref('int_orders_status_hubspot') }} h
+    left join {{ ref('int_orders_status__hubspot') }} h
         on b.id_order = h.id_order
-    left join {{ ref('int_orders_status_cancels') }} c
+    left join {{ ref('int_orders_status__cancels') }} c
         on b.id_order = c.id_order
-    left join {{ ref('int_orders_status_paymentplans_paid') }} p1
+    left join {{ ref('int_orders_status__paymentplans_paid') }} p1
         on b.id_order = p1.id_order
-    left join {{ ref('int_orders_status_pif_paid') }} p2
+    left join {{ ref('int_orders_status__pif_paid') }} p2
         on b.id_order = p2.id_order
-    left join {{ ref('int_orders_status_aged') }} a
+    left join {{ ref('int_orders_status__aged') }} a
         on b.id_order = a.id_order

@@ -43,7 +43,9 @@ with charge as (
     where ifnull(left(b.source, 2), 'ch') IN ('ch', 're', 'du', 'py')
 )
 
-select t.id_balance_transaction
+select {{ dbt_utils.generate_surrogate_key(['t.id_balance_transaction', '"mastermind"']) }} as pk
+    , t.id_balance_transaction
+    , "mastermind" as source
     , t.gross_amount
     , t.fee_amount
     , t.net_amount
@@ -58,6 +60,7 @@ select t.id_balance_transaction
     , cs.email as orig_email
     , i.subscription_id
     , i.payment_intent_id
+    , IFNULL(c.id, c2.id) as charge_id
     , IFNULL(c.description, c2.description) AS charge_description
     , pl.product_id
     , pd.name as product

@@ -6,6 +6,7 @@ with first_instance as (
         , k.funnel_id as funnel_id_captured
         , k.source_desc as source_captured
         , k.source_id as source_id_captured
+        , k.is_test
     from {{ ref('int_contacts__combined') }} k
     where ifnull(k.email, k.orig_email) is not null
     qualify row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc, k.source_id desc) = 1
@@ -58,6 +59,7 @@ select b.email
     , a.state
     , a.zip
     , a.country
+    , b.is_test
 from first_instance b
     left join last_address a
         on ifnull(b.email, b.orig_email) = ifnull(a.email, a.orig_email)

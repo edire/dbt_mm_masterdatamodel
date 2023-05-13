@@ -13,5 +13,6 @@ select dt
     , utm_term
     , source_id
     , source_desc
+    , `bbg-platform.analytics.fnEmail_IsTest`(email) as is_test
 from {{ ref('int_optins__agg') }}
 qualify row_number() over (partition by email, funnel_id order by dt) = 1

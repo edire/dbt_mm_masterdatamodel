@@ -45,6 +45,7 @@ select t.pk as id_transactions
     , t.charge_id
     , t.payment_intent_id
     , t.source
+    , `bbg-platform.analytics.fnEmail_IsTest`(t.email) as is_test
 from trans t
     left join un_classified c
         on t.pk = c.pk

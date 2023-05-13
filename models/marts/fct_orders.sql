@@ -17,6 +17,7 @@ select b.id_order
     , b.hubspot_deal_id
     , b.hubspot_rep_id
     , b.id_transactions
+    , `bbg-platform.analytics.fnEmail_IsTest`(b.email) as is_test
 from {{ ref('int_orders__agg') }} b
     left join {{ ref('int_orders_status__refunds') }} r
         on b.id_order = r.id_order

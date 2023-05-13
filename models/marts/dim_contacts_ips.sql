@@ -6,6 +6,7 @@ with all_ips as (
         , k.dt
         , k.source_id
         , row_number() over (partition by ifnull(k.email, k.orig_email) order by k.dt asc, k.source_id desc) as rownum
+        , k.is_test
     from {{ ref('int_contacts__combined') }} k
     where ifnull(k.email, k.orig_email) is not null
         and (k.ip is not null
@@ -18,6 +19,7 @@ select a.email
     , a.activity_ip
     , a.dt
     , row_number() over (partition by ifnull(a.email, a.orig_email) order by a.dt desc, a.source_id) as recency
+    , a.is_test
 from all_ips a
     left join all_ips aa
         on ifnull(a.email, a.orig_email) = ifnull(aa.email, aa.orig_email)

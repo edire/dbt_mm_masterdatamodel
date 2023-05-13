@@ -178,4 +178,5 @@ with combined as (
 )
 
 select c.*
+    , `bbg-platform.analytics.fnEmail_IsTest`(c.email) as is_test
 from combined c

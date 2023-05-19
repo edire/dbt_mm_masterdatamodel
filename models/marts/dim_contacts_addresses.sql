@@ -1,6 +1,7 @@
 
 with all_address as (
-    select k.email
+    select k.pk
+        , k.email
         , k.orig_email
         , k.address_1
         , k.address_2
@@ -17,7 +18,8 @@ with all_address as (
         and (k.zip is not null or k.state is not null)
 )
 
-select a.email
+select a.pk
+    , a.email
     , a.orig_email
     , a.address_1
     , a.address_2

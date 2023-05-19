@@ -1,5 +1,6 @@
 with all_phones as (
-    select k.email
+    select k.pk
+        , k.email
         , k.orig_email
         , k.phone
         , k.orig_phone
@@ -12,7 +13,8 @@ with all_phones as (
         and k.orig_phone is not null
 )
 
-select a.email
+select a.pk
+    , a.email
     , a.orig_email
     , a.phone
     , a.orig_phone

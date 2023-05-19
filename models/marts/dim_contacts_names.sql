@@ -1,5 +1,6 @@
 with all_names as (
-    select k.email
+    select k.pk
+        , k.email
         , k.orig_email
         , replace(k.first_name, '"', '') as first_name
         , replace(k.last_name, '"', '') as last_name
@@ -12,7 +13,8 @@ with all_names as (
         and (k.first_name is not null or k.last_name is not null)
 )
 
-select a.email
+select a.pk
+    , a.email
     , a.orig_email
     , a.first_name
     , a.last_name

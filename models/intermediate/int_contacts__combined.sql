@@ -179,4 +179,5 @@ with combined as (
 
 select c.*
     , `bbg-platform.analytics.fnEmail_IsTest`(c.email) as is_test
+    , {{ dbt_utils.generate_surrogate_key(['c.email', 'c.dt', 'c.source_id', 'c.source_desc']) }} as pk
 from combined c

@@ -1,5 +1,6 @@
 with all_ips as (
-    select k.email
+    select k.pk
+        , k.email
         , k.orig_email
         , k.ip
         , k.activity_ip
@@ -13,7 +14,8 @@ with all_ips as (
             or k.activity_ip is not null)
 )
 
-select a.email
+select a.pk
+    , a.email
     , a.orig_email
     , a.ip
     , a.activity_ip

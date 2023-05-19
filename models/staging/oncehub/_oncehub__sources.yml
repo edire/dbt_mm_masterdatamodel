@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: oncehub
+    description: OnceHub Account
+    database: bbg-platform
+    schema: oncehub
+    tables:
+      - name: bookings
+        description: Duplicate list of all bookings

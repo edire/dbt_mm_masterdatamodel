@@ -1,6 +1,7 @@
 
 with bookings as (
     select b.id
+        , b.creation_time
         , b.starting_time
         , analytics.fnEmail(b.customer_email) as customer_email
         , b.rep_email
@@ -12,6 +13,7 @@ with bookings as (
 
 , recency as (
     select b.id
+        , b.creation_time
         , b.starting_time
         , b.customer_email
         , b.rep_email
@@ -31,6 +33,7 @@ with bookings as (
     select {{ dbt_utils.generate_surrogate_key(['b.id', 'b.starting_time']) }} as pk
         , b.id as booking_id
         , d.deal_id
+        , b.creation_time
         , b.starting_time
         , b.customer_email
         , b.rep_email

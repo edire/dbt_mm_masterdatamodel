@@ -24,3 +24,11 @@ models:
         tests:
           - unique
           - not_null
+  - name: fct_mastermind__subscriptions
+    description: cleaned up table for Mastermind subscriptions from Stripe
+    columns:
+      - name: pk
+        description: primary key
+        tests:
+          - unique
+          - not_null

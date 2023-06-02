@@ -70,7 +70,7 @@ select {{ dbt_utils.generate_surrogate_key(['t.id_balance_transaction', '"mindmi
     , IFNULL(c.description, c2.description) AS charge_description
     , pl.product_id
     , pd.name as product
-    , sh.canceled_at as cancelled_date
+    , datetime(sh.canceled_at, 'America/Phoenix') as cancelled_date
 from transactions t
     left join charge c
         on t.source = c.id

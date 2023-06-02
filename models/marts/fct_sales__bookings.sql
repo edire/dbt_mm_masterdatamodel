@@ -7,6 +7,7 @@ with bookings as (
         , b.rep_email
         , b.extractiontime
         , b.last_updated_time
+        , b.event_type
     from {{ source('oncehub', 'bookings') }} b
     qualify row_number() over (partition by b.id, b.starting_time order by extractiontime) = 1
 )
@@ -18,6 +19,7 @@ with bookings as (
         , b.customer_email
         , b.rep_email
         , b.last_updated_time
+        , b.event_type
         , row_number() over (partition by b.id order by b.extractiontime desc) as recency
     from bookings b
 )
@@ -25,6 +27,8 @@ with bookings as (
 , hubspot_deal as (
     select d.deal_id
         , d.property_oncehub_booking_id
+        , d.property_offer_made
+        , d.property_objection_reason
         , case when d.deal_pipeline_id = 11280578 and d.deal_pipeline_stage_id = 63590844 then true else false end as is_no_show
     from {{ source('hubspot', 'deal') }} d
     qualify row_number() over (partition by d.property_oncehub_booking_id order by _fivetran_synced desc) = 1
@@ -43,6 +47,12 @@ with bookings as (
             else 'complete' end as booking_status
         , b.last_updated_time
         , b.recency
+        , et.name as event_name
+        , et.label as event_label
+        , case when b.recency = 1 and b.starting_time < current_timestamp then d.property_offer_made end as offer_made
+        , case when b.recency = 1 and b.starting_time < current_timestamp then d.property_objection_reason end as objection_reason
 from recency b
     join hubspot_deal d
         on b.id = d.property_oncehub_booking_id
+    left join {{ source('oncehub', 'event_types') }} et
+        on b.event_type = et.object

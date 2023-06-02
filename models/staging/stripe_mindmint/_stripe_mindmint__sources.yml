@@ -26,3 +26,7 @@ sources:
         description: List of all Stripe Products
       - name: subscription_history
         description: List of stripe subscription information to get cancel status
+      - name: subscription_discount
+        description: Bridge to coupon table
+      - name: coupon
+        description: Coupons available on subscriptions

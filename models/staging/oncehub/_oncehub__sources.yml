@@ -8,3 +8,5 @@ sources:
     tables:
       - name: bookings
         description: Duplicate list of all bookings
+      - name: event_types
+        description: Dimension table for bookings event types

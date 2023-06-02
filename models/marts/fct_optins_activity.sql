@@ -1,4 +1,10 @@
 
+{{
+  config(
+    cluster_by = 'funnel_id',
+    )
+}}
+
 select {{ dbt_utils.generate_surrogate_key(['p.email', 'p.funnel_id', 'p.dt']) }} as pk
     , p.dt
     , p.email

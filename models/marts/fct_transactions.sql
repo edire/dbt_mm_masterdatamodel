@@ -44,6 +44,7 @@ select t.pk as id_transactions
     , t.hubspot_product_id
     , t.charge_id
     , t.payment_intent_id
+    , t.id_balance_transaction
     , t.source
     , `bbg-platform.analytics.fnEmail_IsTest`(t.email) as is_test
 from trans t

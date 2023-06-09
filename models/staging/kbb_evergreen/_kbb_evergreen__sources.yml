@@ -10,3 +10,7 @@ sources:
         description: Click Funnel Optins
       - name: tracking_orders
         description: Click Funnel Orders
+      - name: webinarfuel_leads
+        description: Webinar Fuel Leads
+      - name: webinarfuel_registrations
+        description: Webinar Fuel Registrations

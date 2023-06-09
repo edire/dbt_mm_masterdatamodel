@@ -174,6 +174,50 @@ with combined as (
         , 'stripe_mindmint.customer' as source_desc
         , cast(k.id_customer as string) as source_id
     from {{ ref('stg_stripe_mindmint__customers') }} k
+
+    union all
+
+    select k.email
+        , k.orig_email
+        , k.first_name
+        , k.last_name
+        , k.phone
+        , k.orig_phone
+        , cast(null as string) as address_1
+        , cast(null as string) as address_2
+        , k.city
+        , k.state
+        , cast(null as string) as zip
+        , k.country
+        , k.ip
+        , null as activity_ip
+        , k.webinar_name as funnel_id
+        , cast(k.dt as datetime) as dt
+        , 'kbb_evergreen.webinarfuel_leads' as source_desc
+        , cast(k.id_webinarfuel_leads as string) as source_id
+    from {{ ref('stg_kbb_evergreen__webinarfuel_leads') }} k
+
+    union all
+
+    select k.email
+        , k.orig_email
+        , k.first_name
+        , k.last_name
+        , k.phone
+        , k.orig_phone
+        , cast(null as string) as address_1
+        , cast(null as string) as address_2
+        , k.city
+        , k.state
+        , cast(null as string) as zip
+        , k.country
+        , k.ip
+        , null as activity_ip
+        , k.webinar_name as funnel_id
+        , cast(k.dt as datetime) as dt
+        , 'kbb_evergreen.webinarfuel_registrations' as source_desc
+        , cast(k.id_webinarfuel_registrations as string) as source_id
+    from {{ ref('stg_kbb_evergreen__webinarfuel_registrations') }} k
     
 )
 

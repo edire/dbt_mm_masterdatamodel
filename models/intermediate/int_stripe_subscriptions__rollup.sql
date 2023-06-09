@@ -29,6 +29,15 @@ with base as (
     qualify row_number() over (partition by s.pk order by s.created desc) = 1
 )
 
+, trial_product as (
+    select s.pk
+        , s.created as trial_start
+        , {{ dateadd('day', 's.trial_period_days', 's.created') }} as trial_end
+    from base s
+    where s.product = 'Mastermind 14-Day Trial'
+    qualify row_number() over (partition by s.pk order by s.created desc) = 1
+)
+
 , coupons as (
     select s.pk
         , s.coupon_start
@@ -40,16 +49,18 @@ with base as (
 
 , payment as (
     select s.pk
-        , s.transaction_date as payment_date
+        , s.first_payment_due_date
+        , s.is_paid
+        , s.first_charge_status
         , case when s.product in (
                 'Mastermind.com Yearly Membership  - Launch+ Plan',
                 'Mastermind Annual Purchase',
                 'Roadtrip - Annual Mastermind Upgrade'
             ) then true else false end as is_annual
-        , s.gross_amount
     from base s
-    where s.product not in ('Mastermind 14-Day Trial')
-        and s.gross_amount > 0
+    where s.product not like '%Trial%'
+        and (s.is_paid is not null
+            or s.first_payment_due_date is not null)
     qualify row_number() over (partition by s.pk order by s.created desc) = 1
 )
 
@@ -78,17 +89,11 @@ with base as (
             on s.pk = td.pk
         left join trial_period tp
             on s.pk = tp.pk
-        left join payment pm
-            on s.pk = pm.pk
-        left join non_cancels nc
-            on s.pk = nc.pk
-        left join cancels c
-            on s.pk = c.pk
-            and nc.pk is null
+        left join trial_product tt
+            on s.pk = tt.pk
     where (td.trial_start is not null
-        or tp.trial_start is not null)
-        and ifnull(pm.payment_date, '9999-12-31') > {{ dateadd('hour', '24', 'coalesce(td.trial_start, tp.trial_start)') }}
-        and ifnull(c.cancelled_date, '9999-12-31') > {{ dateadd('hour', '24', 'coalesce(td.trial_start, tp.trial_start)') }}
+        or tp.trial_start is not null
+        or tt.trial_start is not null)
 )
 
 , coupons_combined as (
@@ -100,16 +105,7 @@ with base as (
     from first_instance s
         left join coupons cp
             on s.pk = cp.pk
-        left join payment pm
-            on s.pk = pm.pk
-        left join non_cancels nc
-            on s.pk = nc.pk
-        left join cancels c
-            on s.pk = c.pk
-            and nc.pk is null
     where cp.coupon_start is not null
-        and ifnull(pm.payment_date, '9999-12-31') > {{ dateadd('hour', '24', 'cp.coupon_start') }}
-        and ifnull(c.cancelled_date, '9999-12-31') > {{ dateadd('hour', '24', 'cp.coupon_start') }}
 )
 
 , all_aggs as (
@@ -129,9 +125,9 @@ select s.pk
     , case when cp.pk is not null then true else false end as has_coupon
     , cp.coupon_start
     , cp.coupon_end
-    , pm.payment_date
-    , case when pm.pk is not null then true else false end as is_converted
-    , pm.gross_amount
+    , pm.first_payment_due_date
+    , ifnull(pm.is_paid, false) as made_first_payment
+    , pm.first_charge_status
     , pm.is_annual
     , c.cancelled_date
     , s.funnel_id

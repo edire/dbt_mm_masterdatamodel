@@ -10,13 +10,13 @@ with dte_start as (
 
 , dte_pmt_due as (
     select s.pk
-        , case when s.payment_date > ifnull(s.trial_end, '1900-01-01') and s.payment_date > ifnull(s.coupon_end, '1900-01-01') then s.payment_date
-            when s.is_converted = false
+        , case when s.first_payment_due_date is not null then s.first_payment_due_date
+            when s.made_first_payment = false
                 and s.cancelled_date > ifnull(s.trial_end, '1900-01-01') and s.cancelled_date > ifnull(s.coupon_end, '1900-01-01')
                 then s.cancelled_date
             when s.trial_end > ifnull(s.coupon_end, '1900-01-01') then s.trial_end
             when s.coupon_end > ifnull(s.trial_end, '1900-01-01') then s.coupon_end
-            else coalesce(s.payment_date, s.cancelled_date, s.created) end as payment_due_date
+            else coalesce(s.cancelled_date, s.created) end as payment_due_date
     from {{ ref('int_stripe_subscriptions__rollup') }} s
 )
 
@@ -28,10 +28,9 @@ select s.pk
         when {{ datediff('ds.created_date', 'dp.payment_due_date', 'hour') }} > 24 then 'unknown'
         else null end as perp_type
     , dp.payment_due_date
+    , s.first_charge_status
+    , s.made_first_payment
     , s.cancelled_date
-    , s.payment_date
-    , s.is_converted
-    , s.gross_amount as first_payment_amount
     , s.is_annual
     , s.funnel_id
     , s.funnel_name

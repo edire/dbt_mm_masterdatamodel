@@ -5,7 +5,7 @@
     )
 }}
 
-select {{ dbt_utils.generate_surrogate_key(['p.email', 'p.dt']) }} as pk
+select {{ dbt_utils.generate_surrogate_key(['p.email', 'p.funnel_id']) }} as pk
     , p.dt
     , p.email
     , p.funnel_id

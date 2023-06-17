@@ -1,0 +1,20 @@
+
+with optins as (
+  select p.pk
+    , p.email
+    , p.dt as optin_date
+  from {{ ref('fct_optins') }} p
+where p.is_test = false
+)
+
+select s.pk
+  , floor(date_diff(t.transaction_date, s.optin_date, day) / 7) as wob
+  , floor(date_diff(t.transaction_date, s.optin_date, day) / 28) as fwob
+  , sum(t.gross_amount) as gross_amount
+from optins s
+  join {{ ref('fct_orders') }} d
+    on s.email = d.email
+    and cast(d.order_date as date) >= cast(s.optin_date as date)
+  join {{ ref('fct_transactions') }} t
+    on d.id_order = t.id_order
+group by 1, 2, 3

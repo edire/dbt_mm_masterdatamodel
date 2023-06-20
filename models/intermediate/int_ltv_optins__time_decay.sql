@@ -1,13 +1,13 @@
 
 with optins as (
-  select p.pk
+  select p.id_optin
     , p.email
     , p.dt as optin_date
   from {{ ref('fct_optins') }} p
 where p.is_test = false
 )
 
-select s.pk
+select s.id_optin
   , floor(date_diff(t.transaction_date, s.optin_date, day) / 7) as wob
   , floor(date_diff(t.transaction_date, s.optin_date, day) / 28) as fwob
   , sum(exp(-date_diff(t.transaction_date, s.optin_date, day) / (365.25 / 4)) * t.gross_amount) as gross_amount

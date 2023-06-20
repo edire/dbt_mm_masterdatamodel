@@ -1,6 +1,6 @@
 
 with optins as (
-  select p.pk
+  select p.id_optin
     , p.email
     , p.dt as optin_date
     , ifnull(lead(p.dt, 1) over (partition by p.email order by p.dt), '9999-12-31') as optin_end_date
@@ -8,7 +8,7 @@ with optins as (
 where p.is_test = false
 )
 
-select s.pk
+select s.id_optin
   , floor(date_diff(t.transaction_date, s.optin_date, day) / 7) as wob
   , floor(date_diff(t.transaction_date, s.optin_date, day) / 28) as fwob
   , sum(t.gross_amount) as gross_amount

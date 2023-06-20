@@ -1,6 +1,6 @@
 
 with optins as (
-  select p.pk
+  select p.id_optin
     , p.email
     , c.dt_captured
   from {{ ref('fct_optins') }} p
@@ -10,7 +10,7 @@ with optins as (
 where p.is_test = false
 )
 
-select s.pk
+select s.id_optin
   , floor(date_diff(t.transaction_date, s.dt_captured, day) / 7) as wob
   , floor(date_diff(t.transaction_date, s.dt_captured, day) / 28) as fwob
   , sum(t.gross_amount) as gross_amount

@@ -19,7 +19,6 @@ where p.is_test = false
     , s.email
     , s.funnel_id
     , w.wob
-    , floor(w.wob / 4) as fwob
   from optins s
     cross join dim_wob w
   where w.wob <= s.wob_alive
@@ -30,12 +29,11 @@ select {{ dbt_utils.generate_surrogate_key(['s.id_optin', 's.wob']) }} as id_ltv
   , s.email
   , s.funnel_id
   , s.wob
-  , s.fwob
-  , ft.gross_amount as amt_first_touch
-  , lt.gross_amount as amt_last_touch
-  , et.gross_amount as amt_ever_touch
-  , td.gross_amount as amt_time_decay
-  , ifnull(ft.gross_amount, 0) * 0.4 + ifnull(lt.gross_amount, 0) * 0.4 + ifnull(td.gross_amount, 0) * 0.2 as amt_first_last
+  , ft.amt_first_touch
+  , lt.amt_last_touch
+  , et.amt_ever_touch
+  , et.amt_time_decay
+  , et.amt_lag_time_decay
 from optin_wob s
   left join {{ ref('int_ltv_optins__first_touch') }} ft
     on s.id_optin = ft.id_optin
@@ -46,10 +44,6 @@ from optin_wob s
   left join {{ ref('int_ltv_optins__ever_touch') }} et
     on s.id_optin = et.id_optin
     and s.wob = et.wob
-  left join {{ ref('int_ltv_optins__time_decay') }} td
-    on s.id_optin = td.id_optin
-    and s.wob = td.wob
-where ft.gross_amount <> 0
-  or lt.gross_amount <> 0
-  or et.gross_amount <> 0
-  or td.gross_amount <> 0
+where ft.amt_first_touch <> 0
+  or lt.amt_last_touch <> 0
+  or et.amt_ever_touch <> 0
